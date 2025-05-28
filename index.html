@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Facturación - Periodoncia e Implantes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.4/dist/umd/supabase.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <script type="text/javascript">
+        (function() {
+            emailjs.init("ijWHHeeb0BmsyVNWp");
+        })();
+    </script>
+</head>
+<body>
+    <!-- Loading Animation -->
+    <div class="loader-container" id="loader">
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+            <div class="loader-icon">
+                <i class="fas fa-tooth" style="color: var(--primary); font-size: 2rem;"></i>
+            </div>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="header-shape header-shape-1"></div>
+        <div class="header-shape header-shape-2"></div>
+        
+        <div class="header-content">
+            <div class="brand">
+                <div class="logo">
+                    <i class="fas fa-tooth logo-icon"></i>
+                </div>
+                <div>
+                    <h1 class="site-title">Dra. Pamela Guzmán</h1>
+                    <h2 class="site-subtitle">Sistema de Facturación - Periodoncia e Implantes</h2>
+                </div>
+            </div>
+            <div class="header-controls">
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <!-- Stats Section -->
+        <div class="stats-container">
+            <div class="stat-card animate-fade-in-up delay-100">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-value" id="total-patients">0</div>
+                <div class="stat-label">Pacientes Registrados</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i> 12% este mes
+                </div>
+            </div>
+            
+            <div class="stat-card animate-fade-in-up delay-200">
+                <div class="stat-icon">
+                    <i class="fas fa-tooth"></i>
+                </div>
+                <div class="stat-value" id="total-services">0</div>
+                <div class="stat-label">Servicios Disponibles</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i> 5% este mes
+                </div>
+            </div>
+            
+            <div class="stat-card animate-fade-in-up delay-300">
+                <div class="stat-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-value" id="total-revenue">$0.00</div>
+                <div class="stat-label">Total Presupuestado</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i> 8% este mes
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard">
+            <!-- Patient Management Card -->
+            <div class="card card-md animate-fade-in-up delay-100">
+                <div class="card-decoration card-decoration-1"></div>
+                <div class="card-decoration card-decoration-2"></div>
+                
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <div class="card-icon"><i class="fas fa-user-plus"></i></div>
+                        Gestión de Pacientes
+                    </h2>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="patient-name">Nombre</label>
+                            <input type="text" id="patient-name" class="form-control" placeholder="Nombre del paciente">
+                        </div>
+                        <div class="form-group">
+                            <label for="patient-lastname">Apellido</label>
+                            <input type="text" id="patient-lastname" class="form-control" placeholder="Apellido del paciente">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="patient-birthdate">Fecha de Nacimiento</label>
+                            <input type="date" id="patient-birthdate" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="patient-id">Cédula <span class="optional-text">(opcional para menores de 18)</span></label>
+                            <input type="text" id="patient-id" class="form-control" placeholder="Número de cédula">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="patient-email">Correo Electrónico <span class="optional-text">(opcional)</span></label>
+                            <input type="email" id="patient-email" class="form-control" placeholder="ejemplo@correo.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="patient-phone">Número de Teléfono <span class="optional-text">(opcional)</span></label>
+                            <input type="text" id="patient-phone" class="form-control" placeholder="Teléfono">
+                        </div>
+                    </div>
+                    <button class="button primary-button" id="add-patient-btn">
+                        <i class="fas fa-plus"></i> Agregar Paciente
+                    </button>
+                </div>
+            </div>
+
+            <!-- Services Management Card -->
+            <div class="card card-md animate-fade-in-up delay-200">
+                <div class="card-decoration card-decoration-1"></div>
+                <div class="card-decoration card-decoration-2"></div>
+                
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <div class="card-icon"><i class="fas fa-tooth"></i></div>
+                        Gestión de Servicios
+                    </h2>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="service-name">Nombre del Servicio</label>
+                            <input type="text" id="service-name" class="form-control" placeholder="Nombre del servicio">
+                        </div>
+                        <div class="form-group">
+                            <label for="service-price">Precio</label>
+                            <input type="number" id="service-price" class="form-control" placeholder="Precio">
+                        </div>
+                    </div>
+                    <button class="button primary-button" id="add-service-btn">
+                        <i class="fas fa-plus"></i> Agregar Servicio
+                    </button>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Servicio</th>
+                                    <th>Precio</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="service-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patients List Card -->
+            <div class="card card-lg animate-fade-in-up delay-300">
+                <div class="card-decoration card-decoration-1"></div>
+                <div class="card-decoration card-decoration-2"></div>
+                
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <div class="card-icon"><i class="fas fa-users"></i></div>
+                        Pacientes Registrados
+                    </h2>
+                    <button type="button" class="button accent-button btn-sm" id="search-patients-btn" onclick="openSearchModal()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>Edad</th>
+                                    <th>Cédula</th>
+                                    <th>Correo</th>
+                                    <th>Teléfono</th>
+                                    <th>Total Presupuestado</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="added-patients-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Invoice Generation Card -->
+            <div class="card card-lg animate-fade-in-up delay-400">
+                <div class="card-decoration card-decoration-1"></div>
+                <div class="card-decoration card-decoration-2"></div>
+                
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <div class="card-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                        Generar Presupuesto
+                    </h2>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="selected-patient">Seleccione Paciente</label>
+                            <select id="selected-patient" class="form-control">
+                                <option value="">Seleccione un paciente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="discount">Descuento ($)</label>
+                            <input type="number" id="discount" min="0" value="0" class="form-control" placeholder="Descuento en $">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Seleccione Servicios</label>
+                        <div class="service-checkboxes" id="service-checkboxes"></div>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="apply-itbis" class="checkbox-input">
+                        <label for="apply-itbis">Incluir ITBIS (5%)</label>
+                    </div>
+                    <button class="button secondary-button" id="generate-invoice-btn">
+                        <i class="fas fa-file-pdf"></i> Generar Presupuesto
+                    </button>
+                    <div id="invoice-output"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Floating Action Button -->
+    <div class="fab" id="scroll-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script src="js/supabase.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
